@@ -56,31 +56,37 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       body: Stack(
         children: [
-          Center(
-            child: Text(
-              'CEMS',
-              style: GoogleFonts.iceberg(
-                color: Color.fromARGB(255, 203, 108, 188).withOpacity(0.8),
-                fontSize: 68,
-                fontWeight: FontWeight.w200,
-              ),
-            ),
-          ),
-          SpinKitCircle(
-            size: 60,
-            itemBuilder: (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: index.isEven
-                        ? const Color.fromARGB(255, 203, 108, 188)
-                        : const Color.fromARGB(255, 255, 255, 255),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Center(
+                child: Text(
+                  'CEMS',
+                  style: GoogleFonts.iceberg(
+                    color: Color.fromARGB(255, 203, 108, 188).withOpacity(0.8),
+                    fontSize: 68,
+                    fontWeight: FontWeight.w200,
                   ),
                 ),
-              );
-            },
+              ),
+              SpinKitCircle(
+                size: 60,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(1.0),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: index.isEven
+                            ? const Color.fromARGB(255, 203, 108, 188)
+                            : const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           Align(
             alignment: Alignment.bottomCenter,
