@@ -1,5 +1,74 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'package:cems/bottom_nav.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'new_user.dart';
+import 'package:http/http.dart' as http;
+
+Future<User?> loginUser(
+    String email, String password, BuildContext context) async {
+  try {
+    final response = await http.post(
+      Uri.parse('http://10.0.2.2:3000/users/login'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{'password': password, 'email': email}),
+    );
+    log(response.statusCode.toString());
+    if (response.statusCode != 200) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Backend Error!"),
+          content: Text(jsonDecode(response.body)["message"]),
+        ),
+      );
+      return null;
+    } else {
+      const storage = FlutterSecureStorage();
+      final user = User.fromJson(jsonDecode(response.body.toString()));
+      await storage.write(key: 'email', value: user.email);
+      await storage.write(key: 'pass', value: user.passsword);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => UserNavigation(
+            email: user.email,
+          ),
+        ),
+      );
+      return user;
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e.toString());
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Error!"),
+        content: Text(e.toString()),
+      ),
+    );
+    return null;
+  }
+}
+
+class User {
+  final String email;
+  final String passsword;
+
+  const User({required this.email, required this.passsword});
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+        email: json["user"]['email'], passsword: json["user"]['password']);
+  }
+}
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -9,6 +78,36 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailcontroller = TextEditingController();
+  final TextEditingController _passwordcontroller = TextEditingController();
+  bool isCheking = true;
+  User? _futureUser;
+
+  checkIfUserExist() async {
+    const storage = FlutterSecureStorage();
+    final String email = await storage.read(
+          key: 'email',
+        ) ??
+        "";
+    final String pass = await storage.read(
+          key: 'pass',
+        ) ??
+        "";
+    if (email.isNotEmpty && pass.isNotEmpty) {
+      await loginUser(email, pass, context);
+    } else {
+      setState(() {
+        isCheking = false;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    checkIfUserExist();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextField(
+                                controller: _emailcontroller,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(19),
@@ -72,7 +172,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                   ),
-                                  hintText: "",
+                                  hintText: "email",
                                   hintStyle: GoogleFonts.poppins(
                                     color: Colors.white,
                                     fontSize: 20,
@@ -84,6 +184,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 20,
                               ),
                               TextField(
+                                controller: _passwordcontroller,
+                                obscureText: true,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(19),
@@ -107,7 +209,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: Center(
                                   child: OutlinedButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      _futureUser = await loginUser(
+                                          _emailcontroller.text,
+                                          _passwordcontroller.text,
+                                          context);
+                                      setState(() {});
+                                    },
                                     style: ButtonStyle(
                                       shape: MaterialStateProperty.all(
                                         RoundedRectangleBorder(
@@ -129,7 +237,13 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               Center(
                                 child: TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => NewUser()),
+                                      );
+                                    },
                                     child: const Text(
                                       "New user? Create",
                                       style: TextStyle(
