@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'new_user.dart';
-
 class UserHome extends StatelessWidget {
   const UserHome({Key? key}) : super(key: key);
 

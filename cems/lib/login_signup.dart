@@ -115,15 +115,19 @@ class _LoginScreenState extends State<LoginScreen> {
         children: [
           Container(
             decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                      Color.fromARGB(255, 255, 255, 255),
-                      Color.fromARGB(255, 231, 20, 199),
-                      Color.fromARGB(255, 151, 111, 196),
-                    ],
-                    tileMode: TileMode.clamp)),
+              gradient: LinearGradient(
+                colors: [
+                  Colors.white,
+                  Color(0xffCD4EB9),
+                  Color(0xff976FC4),
+                  Color(0xff8C70C6),
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0.25, .55, 0.9, 1],
+                tileMode: TileMode.repeated,
+              ),
+            ),
           ),
           SingleChildScrollView(
             child: Column(
@@ -162,10 +166,18 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextField(
                                 controller: _emailcontroller,
                                 decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(19),
-                                      borderSide: const BorderSide(
-                                          color: Colors.white)),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(19),
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(19),
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
+                                    ),
+                                  ),
                                   labelText: "username",
                                   labelStyle: GoogleFonts.poppins(
                                     color: Colors.white,
@@ -178,6 +190,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.w500,
                                   ),
+                                  fillColor: Colors.white30,
                                 ),
                               ),
                               const SizedBox(
@@ -187,28 +200,43 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: _passwordcontroller,
                                 obscureText: true,
                                 decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(19),
-                                        borderSide: const BorderSide(
-                                            color: Colors.white)),
-                                    labelText: "password",
-                                    labelStyle: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
+                                  filled: true,
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(19),
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
                                     ),
-                                    hintText: "",
-                                    hintStyle: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w500,
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(19),
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
                                     ),
-                                    fillColor: Colors.transparent),
+                                  ),
+                                  labelText: "password",
+                                  labelStyle: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  hintText: "",
+                                  hintStyle: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  fillColor: Colors.white30,
+                                ),
+                              ),
+                              SizedBox(
+                                height: 45 - 8,
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Center(
-                                  child: OutlinedButton(
+                                  child: MaterialButton(
+                                    minWidth: 152,
+                                    height: 61,
                                     onPressed: () async {
                                       _futureUser = await loginUser(
                                           _emailcontroller.text,
@@ -216,15 +244,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                           context);
                                       setState(() {});
                                     },
-                                    style: ButtonStyle(
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(19.0),
-                                            side: const BorderSide(
-                                                color: Colors.white)),
-                                      ),
+                                    color: Colors.white30,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(19),
                                     ),
+                                    // style: ButtonStyle(
+                                    //   shape: MaterialStateProperty.all(
+                                    //     RoundedRectangleBorder(
+                                    //         borderRadius:
+                                    //             BorderRadius.circular(19.0),
+                                    //         side: const BorderSide(
+                                    //             color: Colors.white)),
+                                    //   ),
+                                    // ),
                                     child: const Text(
                                       "login",
                                       style: TextStyle(
