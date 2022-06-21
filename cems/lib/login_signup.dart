@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'dart:developer';
 import 'package:cems/bottom_nav.dart';
@@ -33,7 +35,7 @@ Future<User?> loginUser(
       final user = User.fromJson(jsonDecode(response.body.toString()));
       await storage.write(key: 'email', value: user.email);
       await storage.write(key: 'pass', value: user.passsword);
-      Navigator.pushReplacement(
+      await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => UserNavigation(
@@ -238,11 +240,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     minWidth: 152,
                                     height: 61,
                                     onPressed: () async {
-                                      _futureUser = await loginUser(
-                                          _emailcontroller.text,
-                                          _passwordcontroller.text,
-                                          context);
-                                      setState(() {});
+                                      await loginUser(_emailcontroller.text,
+                                          _passwordcontroller.text, context);
+                                      // setState(() {});
                                     },
                                     color: Colors.white30,
                                     elevation: 0,

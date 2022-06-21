@@ -19,13 +19,17 @@ class _UserNavigationState extends State<UserNavigation> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     UserHome(),
+    Text(
+      'Index 2: Register',
+      style: optionStyle,
+    ),
     UserProfile(),
     Text(
-      'Index 2: History',
+      'Host',
       style: optionStyle,
     ),
     Text(
-      'ACHIEVEMENTS',
+      'Results',
       style: optionStyle,
     ),
   ];
@@ -75,15 +79,18 @@ class _UserNavigationState extends State<UserNavigation> {
               activeIcon: Icon(Icons.home),
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.app_registration),
+              label: 'Register',
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'Profile',
+              label: 'Person',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              label: 'History',
+              icon: Icon(Icons.create),
+              label: 'Host',
             ),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.badge), label: 'ACHIEVEMENTS'),
+            BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Results')
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.amber[800],
