@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'register_event.dart';
 import 'user_home.dart';
 import 'user_profile.dart';
 
@@ -19,10 +20,7 @@ class _UserNavigationState extends State<UserNavigation> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     UserHome(),
-    Text(
-      'Index 2: Register',
-      style: optionStyle,
-    ),
+    RegisterEvent(),
     UserProfile(),
     Text(
       'Host',
