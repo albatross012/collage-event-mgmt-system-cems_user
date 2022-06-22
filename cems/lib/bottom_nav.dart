@@ -20,7 +20,7 @@ class _UserNavigationState extends State<UserNavigation> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     UserHome(),
-    RegisterEvent(),
+    Registerevent(),
     UserProfile(),
     Text(
       'Host',
