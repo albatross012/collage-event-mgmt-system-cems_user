@@ -4,12 +4,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'bottom_nav.dart';
 
-Future<User?> createUser(String username, String firstName, String lastname,
-    String email, String password, BuildContext context) async {
+Future<User?> createUser(
+    String username,
+    String firstName,
+    String lastname,
+    String email,
+    String password,
+    String phoneNumber,
+    String collegeName,
+    String deptName,
+    BuildContext context) async {
   try {
     final response = await http.post(
       Uri.parse('http://10.0.2.2:3000/users/create'),
@@ -21,7 +30,10 @@ Future<User?> createUser(String username, String firstName, String lastname,
         'firstName': firstName,
         'lastName': lastname,
         'password': password,
-        'email': email
+        'email': email,
+        'phoneNumber': phoneNumber,
+        'dept': deptName,
+        'collegeName': collegeName
       }),
     );
     log(response.statusCode.toString());
@@ -71,13 +83,19 @@ class User {
   final String lastname;
   final String firstname;
   final String passsword;
+  final String? phoneNumber;
+  final String? collegeName;
+  final String? deptName;
 
   const User(
       {required this.username,
       required this.email,
       required this.lastname,
       required this.firstname,
-      required this.passsword});
+      required this.passsword,
+      required this.phoneNumber,
+      required this.collegeName,
+      required this.deptName});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
@@ -85,7 +103,10 @@ class User {
         email: json["userdata"]['email'],
         lastname: json["userdata"]['lastName'],
         firstname: json["userdata"]['firstName'],
-        passsword: json["userdata"]['password']);
+        passsword: json["userdata"]['password'],
+        phoneNumber: json["userdata"]['phoneNumber'],
+        collegeName: json["userdata"]['collegeName'],
+        deptName: json['userdata']['deptName']);
   }
 }
 
@@ -104,110 +125,283 @@ class _NewUserState extends State<NewUser> {
   final TextEditingController _lastnameController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _collegenameController = TextEditingController();
+
+  final TextEditingController _deptnameController = TextEditingController();
+
+  final TextEditingController _phnoController = TextEditingController();
+  final TextEditingController _confirmpasswordController =
+      TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   User? _futureUser;
   @override
   Widget build(BuildContext context) {
+    const title = Text(
+      "NEW USER",
+      style: TextStyle(color: Colors.white),
+    );
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('NEW USER'),
+        // appBar: AppBar(
+        //   title: const Text('NEW USER'),
+        //   elevation: 0,
+        //   backgroundColor: Colors.transparent,
+        // ),
+        // extendBodyBehindAppBar: true,
+        body: Stack(
+      children: [
+        Container(
+          color: Colors.white,
+          // decoration: const BoxDecoration(
+          //   gradient: LinearGradient(
+          //     colors: [
+          //       Colors.white,
+          //       Color.fromARGB(255, 54, 140, 205),
+          //       // Color(0xff976FC4),
+          //       // Color(0xff8C70C6),
+          //     ],
+          //     begin: Alignment.topCenter,
+          //     end: Alignment.bottomCenter,
+          //     stops: [
+          //       0.0,
+          //       .55,
+          //     ],
+          //     tileMode: TileMode.repeated,
+          //   ),
+          // ),
         ),
-        body: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                textfield(
-                    "FIRST NAME", "firstname", _firstnameController, false),
-                textfield("LAST NAME", "lastname", _lastnameController, false),
-                // textfield("Email", "Enter valid email id as abc@gmail.com",
-                //   _emailController, false),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: TextFormField(
-                    controller: _emailController,
-                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (value) {
-                      bool emailValid = RegExp(
-                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                          .hasMatch(value.toString());
-                      if (!emailValid) {
-                        return 'invalid mail';
-                      } else {
-                        return null;
-                      }
-                    },
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: "Email",
-                      hintText: 'Enter valid email id as abc@gmail.com',
-                      labelStyle:
-                          TextStyle(fontSize: 20.0, color: Colors.black),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: CustomScrollView(
+              slivers: [
+                const SliverAppBar(
+                  iconTheme: IconThemeData(color: Colors.white),
+                  elevation: 0,
+                  backgroundColor: Color(0xff36CDC6),
+                  // Provide a standard title.
+                  title: title,
+                  // Allows the user to reveal the app bar if they begin scrolling
+                  // back up the list of items.
+                  floating: true,
+                  // Display a placeholder widget to visualize the shrinking size.
+
+                  // Make the initial height of the SliverAppBar larger than normal.
+                  expandedHeight: 65,
+                ),
+                SliverToBoxAdapter(
+                  child: Form(
+                    key: _formKey,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 25.0),
+                      child: Column(
+                        children: <Widget>[
+                          textfield("FIRST NAME", "firstname",
+                              _firstnameController, false),
+                          textfield("LAST NAME", "lastname",
+                              _lastnameController, false),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 25.0),
+                            child: TextFormField(
+                              controller: _emailController,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (value) {
+                                bool emailValid = RegExp(
+                                        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                    .hasMatch(value.toString());
+                                if (!emailValid) {
+                                  return 'invalid mail';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(19),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(19),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                labelText: "EMAIL",
+                                labelStyle: GoogleFonts.roboto(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                hintText: "username",
+                                hintStyle: GoogleFonts.roboto(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                fillColor: Colors.white30,
+                              ),
+                            ),
+                          ),
+                          textfield("PASSWORD", "eg:Password@123",
+                              _passwordController, true),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 25.0),
+                            child: TextFormField(
+                              controller: _confirmpasswordController,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              validator: (value) {
+                                bool passwordValid = _passwordController.text ==
+                                    _confirmpasswordController.text;
+                                if (!passwordValid) {
+                                  return 'password must be the same';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: InputDecoration(
+                                filled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(19),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(19),
+                                  borderSide: const BorderSide(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                labelText: "CONFIRM PASSWORD",
+                                labelStyle: GoogleFonts.roboto(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                hintText: "",
+                                hintStyle: GoogleFonts.roboto(
+                                  color: Colors.black,
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                fillColor: Colors.white30,
+                              ),
+                            ),
+                          ),
+                          textfield("College Name", '', _collegenameController,
+                              false),
+                          textfield("DeptName", "", _deptnameController, false),
+                          textfield("Phone no", "", _phnoController, false),
+                          SizedBox(
+                            height: 45 - 8,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Center(
+                              child: MaterialButton(
+                                minWidth: 152,
+                                height: 61,
+                                onPressed: () async {
+                                  if (_formKey.currentState!.validate()) {
+                                    _futureUser = await createUser(
+                                        _emailController.text,
+                                        _firstnameController.text,
+                                        _lastnameController.text,
+                                        _emailController.text,
+                                        _passwordController.text,
+                                        _collegenameController.text,
+                                        _deptnameController.text,
+                                        _phnoController.text,
+                                        context);
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) =>
+                                            const CupertinoAlertDialog(
+                                              content: Text("Invalid Values."),
+                                            ));
+                                  }
+                                },
+
+                                color: Color(0xff36CDC6),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(19),
+                                ),
+                                // style: ButtonStyle(
+                                //   shape: MaterialStateProperty.all(
+                                //     RoundedRectangleBorder(
+                                //         borderRadius:
+                                //             BorderRadius.circular(19.0),
+                                //         side: const BorderSide(
+                                //             color: Colors.white)),
+                                //   ),
+                                // ),
+                                child: const Text(
+                                  "CREATE",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 32,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          if (_futureUser != null)
+                            const Text("login successful")
+                        ],
+                      ),
                     ),
                   ),
                 ),
-                textfield(
-                    "PASSWORD", "eg:Password@123", _passwordController, true),
-
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 15.0, right: 15.0, top: 15, bottom: 0),
-                  child: MaterialButton(
-                      color: Colors.blue,
-                      onPressed: () async {
-                        _futureUser = await createUser(
-                            _emailController.text,
-                            _firstnameController.text,
-                            _lastnameController.text,
-                            _emailController.text,
-                            _passwordController.text,
-                            context);
-
-                        setState(() {});
-                        if (!isEmailVaid(_emailController.text)) {
-                          showDialog(
-                              context: context,
-                              builder: (context) => const CupertinoAlertDialog(
-                                    content: Text("Invalid Email."),
-                                  ));
-                        }
-                      },
-                      child: const Text(
-                        "create",
-                        style: TextStyle(color: Colors.white, fontSize: 25),
-                      )),
-                ),
-                if (_futureUser != null) const Text("login successful")
               ],
             ),
           ),
-        ));
+        ),
+      ],
+    ));
   }
 }
 
 Widget textfield(
     String label, String hint, TextEditingController _controller, bool value) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-    child: TextFormField(
+    padding: const EdgeInsets.only(top: 25.0),
+    child: TextField(
       controller: _controller,
-      decoration: InputDecoration(
-        border: const OutlineInputBorder(),
-        labelText: label,
-        hintText: hint,
-        labelStyle: const TextStyle(fontSize: 20.0, color: Colors.black),
-      ),
       obscureText: value,
+      decoration: InputDecoration(
+        filled: true,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(19),
+          borderSide: const BorderSide(
+            color: Colors.black,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(19),
+          borderSide: const BorderSide(
+            color: Colors.black,
+          ),
+        ),
+        labelText: label,
+        labelStyle: GoogleFonts.roboto(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w300,
+        ),
+        hintText: hint,
+        hintStyle: GoogleFonts.roboto(
+          color: Colors.black,
+          fontSize: 20,
+          fontWeight: FontWeight.w300,
+        ),
+        fillColor: Colors.white30,
+      ),
     ),
   );
-}
-
-bool isEmailVaid(String email) {
-  bool emailValid = RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-      .hasMatch(email.toString());
-  if (!emailValid) {
-    return false;
-  } else {
-    return true;
-  }
 }

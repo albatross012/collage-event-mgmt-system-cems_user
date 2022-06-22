@@ -6,6 +6,7 @@ import 'package:cems/bottom_nav.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'new_user.dart';
 import 'package:http/http.dart' as http;
@@ -120,13 +121,16 @@ class _LoginScreenState extends State<LoginScreen> {
               gradient: LinearGradient(
                 colors: [
                   Colors.white,
-                  Color(0xffCD4EB9),
-                  Color(0xff976FC4),
-                  Color(0xff8C70C6),
+                  Color(0xff36CDC6),
+                  // Color(0xff976FC4),
+                  // Color(0xff8C70C6),
                 ],
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                stops: [0.25, .55, 0.9, 1],
+                stops: [
+                  0.25,
+                  .55,
+                ],
                 tileMode: TileMode.repeated,
               ),
             ),
@@ -138,8 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       SizedBox(
-                        child: Image.network(
-                          "https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/icon_page-0001.png?alt=media&token=be2a6669-eda5-4c70-8105-4e332e4fd265",
+                        child: SvgPicture.network(
+                          "https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/logocms_page-0001__1_-removebg-preview.png?alt=media&token=4dca147d-8063-4642-84e9-002889f2514f",
                           height: 245,
                           width: 137,
                         ),

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -11,7 +12,8 @@ class RegisterEvent extends StatefulWidget {
 class _RegisterEventState extends State<RegisterEvent> {
   @override
   Widget build(BuildContext context) {
-    
-    
+    return const Scaffold(
+      body: Text("hello"),
+    );
   }
 }
