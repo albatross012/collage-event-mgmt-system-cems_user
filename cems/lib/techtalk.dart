@@ -16,7 +16,7 @@ class _TechtalkState extends State<Techtalk> {
         children: [
           const Image(
             image: AssetImage(
-              'firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/techtalks.jpg?alt=media&token=02683e3c-0ecc-49fe-9355-971c6d006b12',
+              'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/webinar.jpg?alt=media&token=e84ea3c4-8174-4d28-ab1f-4c503081e354',
             ),
           )
         ],

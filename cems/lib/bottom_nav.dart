@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cems/login_signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +18,7 @@ class UserNavigation extends StatefulWidget {
 
 class _UserNavigationState extends State<UserNavigation> {
   int _selectedIndex = 0;
+  final PageController _pageController = PageController();
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
@@ -33,7 +36,13 @@ class _UserNavigationState extends State<UserNavigation> {
   ];
 
   void _onItemTapped(int index) {
+    log(index.toString());
     setState(() {
+      _pageController.animateToPage(
+        index,
+        duration: Duration(milliseconds: 10),
+        curve: Curves.ease,
+      );
       _selectedIndex = index;
     });
   }
@@ -67,7 +76,15 @@ class _UserNavigationState extends State<UserNavigation> {
           ],
         ),
         body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+          child: PageView(
+            onPageChanged: ((value) {
+              setState(() {
+                _selectedIndex = value.toInt();
+              });
+            }),
+            controller: _pageController,
+            children: [..._widgetOptions],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[

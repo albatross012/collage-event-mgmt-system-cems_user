@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:cems/main.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +22,7 @@ Future<User?> createUser(
     BuildContext context) async {
   try {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:3000/users/create'),
+      Uri.parse('$releaseUrl/users/create'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
