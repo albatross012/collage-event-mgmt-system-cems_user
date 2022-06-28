@@ -1,14 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'dart:convert';
 import 'dart:developer';
 import 'package:cems/bottom_nav.dart';
 import 'package:cems/main.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'new_user.dart';
 import 'package:http/http.dart' as http;
@@ -39,6 +38,8 @@ Future<User?> loginUser(
       final user = User.fromJson(jsonDecode(response.body.toString()));
       await storage.write(key: 'email', value: user.email);
       await storage.write(key: 'pass', value: user.passsword);
+      await storage.write(
+          key: 'token', value: jsonDecode(response.body.toString())["token"]);
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -102,7 +103,13 @@ class _LoginScreenState extends State<LoginScreen> {
         ) ??
         "";
     if (email.isNotEmpty && pass.isNotEmpty) {
-      await loginUser(email, pass, context);
+      await loginUser(email, pass, context).then((value) {
+        if (mounted) {
+          setState(() {
+            isCheking = false;
+          });
+        }
+      });
     } else {
       setState(() {
         isCheking = false;
@@ -166,7 +173,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           "CEMS",
                           style: GoogleFonts.iceberg(
                             color: Colors.white,
-                            fontSize: 48,
+                            fontSize: 68,
                             fontWeight: FontWeight.w200,
                           ),
                         ),
@@ -337,7 +344,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-            if (isBusy)
+            if (isBusy || isCheking)
               Container(
                 decoration: const BoxDecoration(
                   color: Colors.white60,
