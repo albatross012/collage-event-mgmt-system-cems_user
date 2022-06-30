@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'register_event.dart';
 import 'user_home.dart';
 import 'user_profile.dart';
@@ -63,26 +64,62 @@ class _UserNavigationState extends State<UserNavigation> {
             // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: [
-              const DrawerHeader(
-                decoration: BoxDecoration(
+              DrawerHeader(
+                decoration: const BoxDecoration(
                   color: Color(0xff36CDC6),
                 ),
-                child: Text('Drawer Header'),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundColor:
+                              const Color.fromARGB(255, 218, 236, 235),
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const UserProfile()),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.person,
+                              color: Colors.lightBlue.shade400,
+                            ),
+                            iconSize: 50,
+                          ),
+                          // backgroundImage: NetworkImage(user.imageUrl.toString()),
+                        ),
+                        Text(
+                            style: GoogleFonts.roboto(
+                              color: Colors.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            widget.email),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               ListTile(
-                title: const Text('Item 1'),
+                title: const Text('Events'),
                 onTap: () {
                   // Update the state of the app.
                   // ...
                 },
               ),
               ListTile(
-                title: const Text('Item 2'),
+                title: const Text('About'),
                 onTap: () {
                   // Update the state of the app.
                   // ...
                 },
               ),
+              ListTile(title: const Text('mbits'))
             ],
           ),
         ),
@@ -131,7 +168,7 @@ class _UserNavigationState extends State<UserNavigation> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
-              label: 'Person',
+              label: 'Profile',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.create),
@@ -140,8 +177,8 @@ class _UserNavigationState extends State<UserNavigation> {
             BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Results')
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          unselectedItemColor: Colors.amber[800],
+          selectedItemColor: const Color(0xff36CDC6),
+          unselectedItemColor: const Color(0xff36CDC6),
           onTap: _onItemTapped,
           showUnselectedLabels: true,
         ),

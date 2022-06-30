@@ -51,7 +51,7 @@ class _UserProfileState extends State<UserProfile> {
           }
           return SingleChildScrollView(
             child: Container(
-              color: Colors.black.withAlpha(0),
+              color: Colors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -175,7 +175,7 @@ Widget detailsBox({
                     heading,
                     style: GoogleFonts.roboto(
                       color: Colors.black,
-                      fontSize: 30,
+                      fontSize: 28,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -220,7 +220,7 @@ Widget detailsRow({
           key!,
           style: GoogleFonts.roboto(
             color: Colors.black,
-            fontSize: 22,
+            fontSize: 20,
             fontWeight: FontWeight.w300,
           ),
         ),
@@ -228,7 +228,7 @@ Widget detailsRow({
           value.toString(),
           style: GoogleFonts.roboto(
             color: Colors.black,
-            fontSize: 22,
+            fontSize: 16,
             fontWeight: FontWeight.w300,
           ),
         ),

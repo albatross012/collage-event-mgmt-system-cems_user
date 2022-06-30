@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserHome extends StatelessWidget {
@@ -11,30 +12,30 @@ class UserHome extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(
+        //     horizontal: 15,
+        //     vertical: 5,
+        //   ),
+        //   // child: TextField(
+        //   //   decoration: InputDecoration(
+        //   //     hintText: "CEMS",
+        //   //     hintStyle: GoogleFonts.roboto(
+        //   //       color: Colors.grey,
+        //   //       fontSize: 13,
+        //   //       fontWeight: FontWeight.w400,
+        //   //     ),
+        //   //     enabledBorder: OutlineInputBorder(
+        //   //       borderRadius: BorderRadius.circular(18),
+        //   //       borderSide: BorderSide(
+        //   //         color: Colors.grey.withOpacity(0.5),
+        //   //       ),
+        //   //     ),
+        //   //   ),
+        //   // ),
+        // ),
         Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 15,
-            vertical: 5,
-          ),
-          child: TextField(
-            decoration: InputDecoration(
-              hintText: "CEMS",
-              hintStyle: GoogleFonts.roboto(
-                color: Colors.grey,
-                fontSize: 13,
-                fontWeight: FontWeight.w400,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: BorderSide(
-                  color: Colors.grey.withOpacity(0.5),
-                ),
-              ),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(
             "Quick Acess",
             style: GoogleFonts.roboto(
@@ -45,7 +46,7 @@ class UserHome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 110,
+          height: 100,
           child: ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
@@ -70,7 +71,7 @@ class UserHome extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(8.0),
           child: Text(
             "FEEDS",
             style: GoogleFonts.roboto(
@@ -81,7 +82,7 @@ class UserHome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 655,
+          height: 350,
           child: Material(
             child: ListView.builder(
               itemBuilder: (context, index) => Container(
@@ -103,19 +104,23 @@ class UserHome extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                "https://i.guim.co.uk/img/media/1bb31654c7ada0b32268489b347bbe9067c72fdc/164_256_3724_2234/master/3"
-                                "724.jpg?width=1200&quality=85&auto=format&fit=max&s=edf0d8f3cdffbb5a6a3794bae33842a1"),
-                            fit: BoxFit.cover),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(18),
-                          topRight: Radius.circular(18),
-                        ),
-                        color: Colors.red,
-                      ),
                       height: 300,
+                      child: ImageSlideshow(
+                          width: double.infinity,
+                          height: 200,
+                          initialPage: 0,
+                          indicatorColor: Colors.blue,
+                          indicatorBackgroundColor: Colors.grey,
+                          children: [
+                            Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
+                            Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
+                            Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
+                            Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
+                          ]),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
