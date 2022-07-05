@@ -115,11 +115,11 @@ class UserHome extends StatelessWidget {
                             Image.network(
                                 'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
                             Image.network(
-                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/3724.webp?alt=media&token=ef9d5d2e-0d81-4c8a-be59-96de0c973a20'),
                             Image.network(
                                 'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
                             Image.network(
-                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/3724.webp?alt=media&token=ef9d5d2e-0d81-4c8a-be59-96de0c973a20'),
                           ]),
                     ),
                     Padding(
