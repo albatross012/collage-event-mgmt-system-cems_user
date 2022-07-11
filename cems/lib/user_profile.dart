@@ -45,93 +45,98 @@ class _UserProfileState extends State<UserProfile> {
         future: getUserData(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-              child: LinearProgressIndicator(),
+            return const Center(
+              child: CircularProgressIndicator(),
             );
           }
-          return SingleChildScrollView(
-            child: Container(
-              color: Colors.white,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  const Center(
-                    child: CircleAvatar(
-                      radius: 80,
-                      backgroundColor: Color(0xff36CDC6),
-                      // backgroundImage: NetworkImage(user.imageUrl.toString()),
+          return Container(
+            color: Colors.white,
+            child: SingleChildScrollView(
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 15,
                     ),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  detailsBox(
-                    heading: "Basic Details",
-                    onTap: () {},
-                    children: [
-                      detailsRow(
-                          key: "Name        ",
-                          value:
-                              "${snapshot.data?.firstname} ${snapshot.data?.lastname}"),
-                      detailsRow(
-                          key: "Email       ", value: snapshot.data?.email),
-                      detailsRow(
-                          key: "Phone Number",
-                          value: snapshot.data?.phoneNumber),
-                      detailsRow(
-                          key: "College Name",
-                          value: snapshot.data?.collegeName),
-                      detailsRow(
-                          key: "DeptName    ", value: snapshot.data?.deptName),
-                    ],
-                  ),
-                  detailsBox(
-                      heading: "Additional Details",
+                    const Center(
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundColor: Color(0xff36CDC6),
+                        // backgroundImage: NetworkImage(user.imageUrl.toString()),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    detailsBox(
+                      heading: "Basic Details",
                       onTap: () {},
                       children: [
-                        detailsRow(key: "Year of Joining", value: ""),
-                        detailsRow(key: "Admission no", value: ""),
-                        detailsRow(key: "", value: ""),
-                      ]),
-                  Center(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 18),
-                      child: MaterialButton(
-                        focusElevation: 0,
-                        elevation: 0,
-                        hoverElevation: 0,
-                        highlightElevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        color: const Color(0xff36CDC6),
-                        minWidth: 150.0,
-                        onPressed: () async {
-                          await storage.deleteAll();
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SplashScreen(),
+                        detailsRow(
+                            key: "Name        ",
+                            value:
+                                "${snapshot.data?.firstname} ${snapshot.data?.lastname}"),
+                        detailsRow(
+                            key: "Email       ", value: snapshot.data?.email),
+                        detailsRow(
+                            key: "Phone Number",
+                            value: snapshot.data?.phoneNumber),
+                        detailsRow(
+                            key: "College Name",
+                            value: snapshot.data?.collegeName),
+                        detailsRow(
+                            key: "DeptName    ",
+                            value: snapshot.data?.deptName),
+                      ],
+                    ),
+                    detailsBox(
+                        heading: "Additional Details",
+                        onTap: () {},
+                        children: [
+                          detailsRow(key: "Year of Joining", value: ""),
+                          detailsRow(key: "Admission no", value: ""),
+                          detailsRow(key: "", value: ""),
+                        ]),
+                    Center(
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 18),
+                        child: MaterialButton(
+                          focusElevation: 0,
+                          elevation: 0,
+                          hoverElevation: 0,
+                          highlightElevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          color: const Color(0xff36CDC6),
+                          minWidth: 150.0,
+                          onPressed: () async {
+                            await storage.deleteAll();
+                            Navigator.popUntil(
+                                context, (route) => route.isFirst);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SplashScreen(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            "Logout",
+                            style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0.8,
                             ),
-                          );
-                        },
-                        child: Text(
-                          "Logout",
-                          style: GoogleFonts.roboto(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0.8,
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           );

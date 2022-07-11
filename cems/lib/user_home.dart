@@ -82,7 +82,7 @@ class UserHome extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 350,
+          height: 765,
           child: Material(
             child: ListView.builder(
               itemBuilder: (context, index) => Container(

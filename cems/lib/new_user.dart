@@ -1,14 +1,38 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:cems/main.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import 'bottom_nav.dart';
+
+Future<String?> uploadImageAndGetUrl() async {
+  final picker = ImagePicker();
+  final image = await picker.pickImage(source: ImageSource.gallery);
+  if (image != null) {
+    File file = File(image.path);
+    final ref = FirebaseStorage.instance
+        .ref('/profile_images/${DateTime.now().millisecondsSinceEpoch}');
+    final metadata = SettableMetadata(
+      contentType: 'image/jpeg',
+      customMetadata: {'picked-file-path': file.path},
+    );
+    log("her");
+    final url = await ref.putFile(File(file.path), metadata).then((p0) async {
+      log("herer");
+      return (await p0.ref.getDownloadURL());
+    });
+    log(url);
+    return url;
+  }
+  return null;
+}
 
 Future<User?> createUser(
     String username,
@@ -19,6 +43,7 @@ Future<User?> createUser(
     String phoneNumber,
     String collegeName,
     String deptName,
+    String imageUrl,
     BuildContext context) async {
   try {
     final response = await http.post(
@@ -34,7 +59,8 @@ Future<User?> createUser(
         'email': email,
         'phoneNumber': phoneNumber,
         'deptName': deptName,
-        'collegeName': collegeName
+        'collegeName': collegeName,
+        'imageUrl': imageUrl
       }),
     );
     log(response.statusCode.toString());
@@ -52,6 +78,7 @@ Future<User?> createUser(
       final user = User.fromJson(jsonDecode(response.body.toString()));
       await storage.write(key: 'email', value: user.email);
       await storage.write(key: 'pass', value: user.passsword);
+      await storage.write(key: 'imageUrl', value: user.imageUrl);
       await storage.write(
           key: 'token', value: jsonDecode(response.body.toString())["token"]);
       Navigator.popUntil(context, (route) => route.isFirst);
@@ -89,6 +116,7 @@ class User {
   final String? phoneNumber;
   final String? collegeName;
   final String? deptName;
+  final String? imageUrl;
 
   const User(
       {required this.username,
@@ -98,7 +126,8 @@ class User {
       required this.passsword,
       required this.phoneNumber,
       required this.collegeName,
-      required this.deptName});
+      required this.deptName,
+      required this.imageUrl});
 
   factory User.fromJson(Map<String, dynamic> json) {
     log(json.toString());
@@ -110,7 +139,8 @@ class User {
         passsword: json["userdata"]['password'],
         phoneNumber: json["userdata"]['phoneNumber'],
         collegeName: json["userdata"]['collegeName'],
-        deptName: json['userdata']['deptName']);
+        deptName: json['userdata']['deptName'],
+        imageUrl: json['userdata']['imageUrl']);
   }
 }
 
@@ -139,6 +169,7 @@ class _NewUserState extends State<NewUser> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
   User? _futureUser;
+  String? imageUrl;
   @override
   Widget build(BuildContext context) {
     const title = Text(
@@ -202,6 +233,56 @@ class _NewUserState extends State<NewUser> {
                             padding: const EdgeInsets.only(top: 25.0),
                             child: Column(
                               children: <Widget>[
+                                Center(
+                                  child: SizedBox(
+                                    height: 200,
+                                    child: Stack(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 80,
+                                          backgroundColor:
+                                              const Color(0xff36CDC6),
+                                          backgroundImage: imageUrl == null
+                                              ? null
+                                              : NetworkImage(
+                                                  imageUrl.toString()),
+                                          child: imageUrl == null
+                                              ? const Icon(
+                                                  Icons.person,
+                                                  color: Colors.black,
+                                                  size: 60,
+                                                )
+                                              : null,
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          bottom: 40,
+                                          child: CircleAvatar(
+                                            radius: 30,
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 205, 234, 232),
+                                            child: IconButton(
+                                              onPressed: () async {
+                                                await uploadImageAndGetUrl()
+                                                    .then((value) {
+                                                  log(value.toString());
+                                                  setState(() {
+                                                    imageUrl = value;
+                                                  });
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                Icons.camera_alt,
+                                                size: 35,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                                 textfield("FIRST NAME", "firstname",
                                     _firstnameController, false),
                                 textfield("LAST NAME", "lastname",
@@ -329,6 +410,7 @@ class _NewUserState extends State<NewUser> {
                                                   _phnoController.text,
                                                   _collegenameController.text,
                                                   _deptnameController.text,
+                                                  imageUrl ?? "",
                                                   context)
                                               .then((value) {
                                             if (mounted) {
