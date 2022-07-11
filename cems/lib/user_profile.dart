@@ -16,7 +16,6 @@ class UserProfile extends StatefulWidget {
 
 class _UserProfileState extends State<UserProfile> {
   final storage = const FlutterSecureStorage();
-  User? user;
   Future<User?> getUserData() async {
     try {
       final String? token = await storage.read(key: 'token');
@@ -60,11 +59,14 @@ class _UserProfileState extends State<UserProfile> {
                     const SizedBox(
                       height: 15,
                     ),
-                    const Center(
+                    Center(
                       child: CircleAvatar(
                         radius: 80,
                         backgroundColor: Color(0xff36CDC6),
-                        // backgroundImage: NetworkImage(user.imageUrl.toString()),
+                        backgroundImage: snapshot.data == null
+                            ? const NetworkImage(
+                                "https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/profile_images%2Fimages.png?alt=media&token=8de403c5-d503-4b17-a171-3c5be07bb76e")
+                            : NetworkImage(snapshot.data!.imageUrl.toString()),
                       ),
                     ),
                     const SizedBox(

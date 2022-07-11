@@ -113,19 +113,19 @@ class UserHome extends StatelessWidget {
                           indicatorBackgroundColor: Colors.grey,
                           children: [
                             Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/WhatsApp%20Image%202022-07-11%20at%209.40.54%20PM.jpeg?alt=media&token=225d5a0d-caa7-424e-8643-227c1cc04349'),
+                            Image.network(
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/WhatsApp%20Image%202022-07-11%20at%209.38.59%20PM.jpeg?alt=media&token=ef906b64-b071-48e7-be3d-a684f4e0065d'),
+                            Image.network(
                                 'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
                             Image.network(
-                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/3724.webp?alt=media&token=ef9d5d2e-0d81-4c8a-be59-96de0c973a20'),
-                            Image.network(
-                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/splash.jpg?alt=media&token=570ebe82-7f77-469a-88e5-cdeb5943be52'),
-                            Image.network(
-                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/3724.webp?alt=media&token=ef9d5d2e-0d81-4c8a-be59-96de0c973a20'),
+                                'https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot.com/o/WhatsApp%20Image%202022-07-11%20at%209.40.57%20PM.jpeg?alt=media&token=c80a9ff8-4b49-4180-9e1f-023ec0686086'),
                           ]),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Title $index",
+                        "Thandav",
                         style: GoogleFonts.roboto(
                           fontSize: 23,
                           fontWeight: FontWeight.bold,

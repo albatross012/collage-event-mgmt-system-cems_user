@@ -60,7 +60,7 @@ Future<User?> createUser(
         'phoneNumber': phoneNumber,
         'deptName': deptName,
         'collegeName': collegeName,
-        'imageUrl': imageUrl
+        'profilePic': imageUrl
       }),
     );
     log(response.statusCode.toString());
@@ -78,7 +78,6 @@ Future<User?> createUser(
       final user = User.fromJson(jsonDecode(response.body.toString()));
       await storage.write(key: 'email', value: user.email);
       await storage.write(key: 'pass', value: user.passsword);
-      await storage.write(key: 'imageUrl', value: user.imageUrl);
       await storage.write(
           key: 'token', value: jsonDecode(response.body.toString())["token"]);
       Navigator.popUntil(context, (route) => route.isFirst);
@@ -140,7 +139,7 @@ class User {
         phoneNumber: json["userdata"]['phoneNumber'],
         collegeName: json["userdata"]['collegeName'],
         deptName: json['userdata']['deptName'],
-        imageUrl: json['userdata']['imageUrl']);
+        imageUrl: json['userdata']['profilePic']);
   }
 }
 
