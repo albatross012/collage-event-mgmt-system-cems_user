@@ -27,7 +27,7 @@ class _UserNavigationState extends State<UserNavigation> {
     Registerevent(),
     UserProfile(),
     Text(
-      'Host',
+      'History',
       style: optionStyle,
     ),
     Text(
@@ -171,8 +171,8 @@ class _UserNavigationState extends State<UserNavigation> {
               label: 'Profile',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.create),
-              label: 'Host',
+              icon: Icon(Icons.history),
+              label: 'History',
             ),
             BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Results')
           ],
