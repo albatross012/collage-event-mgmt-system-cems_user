@@ -1,112 +1,176 @@
-//ignore_for_file: prefer_const_constructors
-
-import 'package:cems/games.dart';
-import 'package:cems/techtalk.dart';
-import 'package:cems/webinar.dart';
-import 'package:cems/workshop.dart';
+import 'dart:convert';
+import 'dart:developer';
+import 'package:cems/main.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
-void main() {
-  runApp(MaterialApp(
-    home: Registerevent(),
-  ));
-}
-
-class Registerevent extends StatefulWidget {
-  const Registerevent({Key? key}) : super(key: key);
+class RegisterEvent extends StatefulWidget {
+  const RegisterEvent({Key? key}) : super(key: key);
 
   @override
-  State<Registerevent> createState() => _RegistereventState();
+  State<RegisterEvent> createState() => _RegisterEventState();
 }
 
-class _RegistereventState extends State<Registerevent> {
+class _RegisterEventState extends State<RegisterEvent> {
+  List<Event> events = [];
+  final storage = const FlutterSecureStorage();
+  Future<bool> getEvents() async {
+    try {
+      var url = Uri.parse('$releaseUrl/events/getevents');
+      var response = await http.get(
+        url,
+      );
+
+      log('Response status: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        setState(() {
+          events = jsonDecode(response.body)["events"]
+              .map<Event>((e) => Event.fromJson(e))
+              .toList();
+          events = events.reversed.toList();
+        });
+        return true;
+      } else {
+        log("Somthing went wrong");
+        return false;
+      }
+    } catch (e) {
+      log("Error occured in events -->$e");
+      return false;
+    }
+  }
+
+  @override
+  void initState() {
+    getEvents();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Material(
-      child: GridView.builder(
-        itemCount: events.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
-        ),
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              route(index + 1, context);
-            },
-            child: Container(
-              height: 100,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                    events[index]["url"].toString(),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Material(
+                  child: ListView.builder(
+                    padding: EdgeInsets.only(bottom: 200),
+                    itemBuilder: (context, index) => Container(
+                      margin: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(1, -1),
+                            color: Colors.black.withAlpha(40),
+                          )
+                        ],
+                        borderRadius: BorderRadiusDirectional.circular(
+                          28,
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ImageSlideshow(
+                            width: double.infinity,
+                            height: 300,
+                            initialPage: 0,
+                            indicatorColor: Colors.blue,
+                            indicatorBackgroundColor: Colors.grey,
+                            children: events[index]
+                                .imageUrl
+                                .map((e) => Container(
+                                      height: 300,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          fit: BoxFit.fill,
+                                          image: NetworkImage(e),
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              events[index].eventName.toString(),
+                              style: GoogleFonts.roboto(
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              events[index].description.toString(),
+                              style: GoogleFonts.roboto(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: MaterialButton(
+                              onPressed: () {},
+                              minWidth: 152,
+                              height: 61,
+                              color: const Color(0xff36CDC6),
+                              elevation: 0,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(19),
+                              ),
+                              child: const Text(
+                                "REGISTER",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 32,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    itemCount: events.length,
                   ),
-                  fit: BoxFit.cover,
                 ),
-                borderRadius: BorderRadius.circular(18),
-                color: Colors.deepPurple.shade300,
               ),
-              child: Center(
-                  child: Text(
-                events[index]["title"].toString(),
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              )),
-            ),
-          );
-        },
+            ],
+          ),
+        ),
       ),
     );
   }
 }
 
-List<dynamic> events = [
-  {
-    "title": "Games",
-    "url": "https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot"
-        ".com/o/games.png?alt=media&token=b511d263-5346-45f5-ab2e-7ed3e7c02704"
-  },
-  {
-    "title": "Webinar",
-    "url": "https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot"
-        ".com/o/webinar.jpg?alt=media&token=e84ea3c4-8174-4d28-ab1f-4c503081e354"
-  },
-  {
-    "title": "Workshop",
-    "url": "https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot"
-        ".com/o/webinar.jpg?alt=media&token=e84ea3c4-8174-4d28-ab1f-4c503081e354"
-  },
-  {
-    "title": "Tectlak",
-    "url": "https://firebasestorage.googleapis.com/v0/b/eventmanagement-7d33f.appspot"
-        ".com/o/webinar.jpg?alt=media&token=e84ea3c4-8174-4d28-ab1f-4c503081e354"
-  }
-];
-route(int pageNumber, BuildContext context) {
-  if (pageNumber == 1) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Games()),
-    );
-  }
-  if (pageNumber == 2) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Webinar()),
-    );
-  }
-  if (pageNumber == 3) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Workshop()),
-    );
-  }
-  if (pageNumber == 4) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Techtalk()),
+class Event {
+  final String description;
+  final String eventName;
+  final List<String> imageUrl;
+
+  const Event(
+      {required this.eventName,
+      required this.description,
+      required this.imageUrl});
+
+  factory Event.fromJson(Map<String, dynamic> json) {
+    log(json.toString());
+    return Event(
+      eventName: json['eventName'],
+      description: json['description'],
+      imageUrl: json['imageUrl'].map<String>((e) => e.toString()).toList(),
     );
   }
 }

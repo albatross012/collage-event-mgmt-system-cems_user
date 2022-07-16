@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:cems/login_signup.dart';
+import 'package:cems/register_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'register_event.dart';
+
 import 'user_home.dart';
 import 'user_profile.dart';
 
@@ -24,7 +25,7 @@ class _UserNavigationState extends State<UserNavigation> {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     UserHome(),
-    Registerevent(),
+    RegisterEvent(),
     UserProfile(),
     Text(
       'History',
@@ -79,11 +80,8 @@ class _UserNavigationState extends State<UserNavigation> {
                               const Color.fromARGB(255, 218, 236, 235),
                           child: IconButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const UserProfile()),
-                              );
+                              _pageController.jumpToPage(2);
+                              Navigator.pop(context);
                             },
                             icon: Icon(
                               Icons.person,
