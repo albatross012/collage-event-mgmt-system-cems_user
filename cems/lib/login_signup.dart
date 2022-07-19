@@ -158,8 +158,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 60,
                         ),
                         Container(
-                          height: 400,
-                          width: 400,
+                          height: 300,
+                          width: 300,
                           decoration: const BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.cover,
@@ -169,12 +169,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        Text(
-                          "CEMS",
-                          style: GoogleFonts.iceberg(
-                            color: Colors.white,
-                            fontSize: 68,
-                            fontWeight: FontWeight.w200,
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                            "CEMS",
+                            style: GoogleFonts.iceberg(
+                              color: Colors.white,
+                              fontSize: 68,
+                              fontWeight: FontWeight.w200,
+                            ),
                           ),
                         ),
                       ],
