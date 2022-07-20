@@ -2,14 +2,70 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:cems/main.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
+Future<Register?> createRegister(
+    String username, String id, BuildContext context) async {
+  try {
+    final response = await http.post(
+      Uri.parse('$releaseUrl/register/add'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'username': username,
+        'id': id,
+      }),
+    );
+    log(response.statusCode.toString());
+    if (response.statusCode != 200) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("Backend Error!"),
+          content: Text(jsonDecode(response.body)["message"]),
+        ),
+      );
+      return null;
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print(e.toString());
+    }
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Error!"),
+        content: Text(e.toString()),
+      ),
+    );
+    return null;
+  }
+}
+
+class Register {
+  final String username;
+  final String id;
+
+  const Register({
+    required this.username,
+    required this.id,
+  });
+
+  factory Register.fromJson(Map<String, dynamic> json) {
+    log(json.toString());
+    return Register(username: json['username'], id: json['id']);
+  }
+}
+
 class RegisterEvent extends StatefulWidget {
-  const RegisterEvent({Key? key}) : super(key: key);
+  final String email;
+  const RegisterEvent({Key? key, required this.email}) : super(key: key);
 
   @override
   State<RegisterEvent> createState() => _RegisterEventState();
@@ -17,6 +73,7 @@ class RegisterEvent extends StatefulWidget {
 
 class _RegisterEventState extends State<RegisterEvent> {
   List<Event> events = [];
+
   bool isLoading = true;
   final storage = const FlutterSecureStorage();
   Future<bool> getEvents() async {
@@ -75,14 +132,14 @@ class _RegisterEventState extends State<RegisterEvent> {
                       height: MediaQuery.of(context).size.height,
                       child: Material(
                         child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: 200),
+                          padding: const EdgeInsets.only(bottom: 200),
                           itemBuilder: (context, index) => Container(
-                            margin: EdgeInsets.all(8),
+                            margin: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               boxShadow: [
                                 BoxShadow(
-                                  offset: Offset(1, -1),
+                                  offset: const Offset(1, -1),
                                   color: Colors.black.withAlpha(40),
                                 )
                               ],
@@ -95,7 +152,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                               children: [
                                 ImageSlideshow(
                                   width: double.infinity,
-                                  height: 300,
+                                  height: 00,
                                   initialPage: 0,
                                   indicatorColor: Colors.blue,
                                   indicatorBackgroundColor: Colors.grey,
@@ -136,7 +193,10 @@ class _RegisterEventState extends State<RegisterEvent> {
                                 ),
                                 Center(
                                   child: MaterialButton(
-                                    onPressed: () {},
+                                    onPressed: () async {
+                                      await createRegister(widget.email,
+                                          events[index].id, context);
+                                    },
                                     minWidth: 152,
                                     height: 61,
                                     color: const Color(0xff36CDC6),
@@ -172,15 +232,17 @@ class Event {
   final String description;
   final String eventName;
   final List<String> imageUrl;
-
+  final String id;
   const Event(
       {required this.eventName,
       required this.description,
-      required this.imageUrl});
+      required this.imageUrl,
+      required this.id});
 
   factory Event.fromJson(Map<String, dynamic> json) {
     log(json.toString());
     return Event(
+      id: json['_id'],
       eventName: json['eventName'],
       description: json['description'],
       imageUrl: json['imageUrl'].map<String>((e) => e.toString()).toList(),

@@ -208,7 +208,7 @@ class _NewUserState extends State<NewUser> {
           padding: const EdgeInsets.all(8.0),
           child: Center(
             child: isLoading
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : CustomScrollView(
                     slivers: [
                       const SliverAppBar(
@@ -386,7 +386,7 @@ class _NewUserState extends State<NewUser> {
                                     "DeptName", "", _deptnameController, false),
                                 textfield(
                                     "Phone no", "", _phnoController, false),
-                                SizedBox(
+                                const SizedBox(
                                   height: 45 - 8,
                                 ),
                                 Padding(

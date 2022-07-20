@@ -232,12 +232,12 @@ Widget gridCreate(BuildContext context,
             size: 75,
             color: Color.fromARGB(255, 36, 188, 10),
           ),
-          SizedBox(
+          const SizedBox(
             height: 32,
           ),
           Text(
             label,
-            style: TextStyle(color: Colors.black, fontSize: 25),
+            style: const TextStyle(color: Colors.black, fontSize: 25),
           ),
         ],
       ),

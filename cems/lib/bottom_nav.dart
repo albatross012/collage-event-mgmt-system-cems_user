@@ -19,30 +19,35 @@ class UserNavigation extends StatefulWidget {
 }
 
 class _UserNavigationState extends State<UserNavigation> {
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions = <Widget>[
+      const UserHome(),
+      RegisterEvent(email: widget.email),
+      const UserProfile(),
+      const Text(
+        'History',
+        style: optionStyle,
+      ),
+      const Text(
+        'Results',
+        style: optionStyle,
+      ),
+    ];
+  }
+
   int _selectedIndex = 0;
   final PageController _pageController = PageController();
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    UserHome(),
-    RegisterEvent(),
-    UserProfile(),
-    Text(
-      'History',
-      style: optionStyle,
-    ),
-    Text(
-      'Results',
-      style: optionStyle,
-    ),
-  ];
-
+  List<Widget> _widgetOptions = [];
   void _onItemTapped(int index) {
     log(index.toString());
     setState(() {
       _pageController.animateToPage(
         index,
-        duration: Duration(milliseconds: 10),
+        duration: const Duration(milliseconds: 10),
         curve: Curves.ease,
       );
       _selectedIndex = index;
@@ -122,7 +127,7 @@ class _UserNavigationState extends State<UserNavigation> {
           ),
         ),
         appBar: AppBar(
-          backgroundColor: Color(0xff36CDC6),
+          backgroundColor: const Color(0xff36CDC6),
           title: Text('USER-${widget.email}'),
           actions: [
             IconButton(
