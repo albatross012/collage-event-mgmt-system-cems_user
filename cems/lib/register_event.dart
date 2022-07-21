@@ -208,7 +208,7 @@ class _RegisterEventState extends State<RegisterEvent> {
                                   child: MaterialButton(
                                     onPressed: () async {
                                       setState(() {
-                                        isBusy = true;
+                                        isBusy = false;
                                       });
                                       await createRegister(widget.email,
                                               events[index].id, context)
