@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cems/alreadyregistered.dart';
 import 'package:cems/login_signup.dart';
 import 'package:cems/register_event.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +27,7 @@ class _UserNavigationState extends State<UserNavigation> {
       const UserHome(),
       RegisterEvent(email: widget.email),
       const UserProfile(),
-      const Text(
-        'History',
-        style: optionStyle,
-      ),
+      Registered(email: widget.email),
       const Text(
         'Results',
         style: optionStyle,
@@ -174,8 +172,8 @@ class _UserNavigationState extends State<UserNavigation> {
               label: 'Profile',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.history),
-              label: 'History',
+              icon: Icon(Icons.local_activity),
+              label: 'Activities',
             ),
             BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Results')
           ],
