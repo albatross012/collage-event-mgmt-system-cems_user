@@ -27,11 +27,19 @@ Future<Register?> createRegister(
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Backend Error!"),
+          title: const Text("Alert"),
           content: Text(jsonDecode(response.body)["message"]),
         ),
       );
       return null;
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Registeration Sucessful!"),
+          content: Text("You have Successfully registered"),
+        ),
+      );
     }
   } catch (e) {
     if (kDebugMode) {
@@ -46,6 +54,7 @@ Future<Register?> createRegister(
     );
     return null;
   }
+  return null;
 }
 
 class Register {
@@ -75,6 +84,7 @@ class _RegisterEventState extends State<RegisterEvent> {
   List<Event> events = [];
 
   bool isLoading = true;
+  bool isBusy = false;
   final storage = const FlutterSecureStorage();
   Future<bool> getEvents() async {
     try {
@@ -115,7 +125,7 @@ class _RegisterEventState extends State<RegisterEvent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
+      body: isLoading || isBusy
           ? const Center(
               child: CupertinoActivityIndicator(
                 color: Color(0xff36CDC6),
@@ -152,22 +162,25 @@ class _RegisterEventState extends State<RegisterEvent> {
                               children: [
                                 ImageSlideshow(
                                   width: double.infinity,
-                                  height: 00,
+                                  height: 500,
                                   initialPage: 0,
                                   indicatorColor: Colors.blue,
                                   indicatorBackgroundColor: Colors.grey,
                                   children: events[index]
                                       .imageUrl
-                                      .map((e) => Container(
-                                            height: 300,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                              image: DecorationImage(
-                                                fit: BoxFit.fill,
-                                                image: NetworkImage(e),
-                                              ),
+                                      .map(
+                                        (e) => Container(
+                                          height: 500,
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey.shade200,
+                                            image: DecorationImage(
+                                              fit: BoxFit.fill,
+                                              image: NetworkImage(e),
                                             ),
-                                          ))
+                                          ),
+                                        ),
+                                      )
                                       .toList(),
                                 ),
                                 Padding(
@@ -194,8 +207,18 @@ class _RegisterEventState extends State<RegisterEvent> {
                                 Center(
                                   child: MaterialButton(
                                     onPressed: () async {
+                                      setState(() {
+                                        isBusy = true;
+                                      });
                                       await createRegister(widget.email,
-                                          events[index].id, context);
+                                              events[index].id, context)
+                                          .then((value) {
+                                        if (mounted) {
+                                          setState(() {
+                                            isBusy = false;
+                                          });
+                                        }
+                                      });
                                     },
                                     minWidth: 152,
                                     height: 61,
