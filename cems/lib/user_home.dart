@@ -85,58 +85,58 @@ class _UserHomeState extends State<UserHome> {
           //   //   ),
           //   // ),
           // ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "Quick Acess",
-              style: GoogleFonts.roboto(
-                color: Colors.black,
-                fontSize: 18,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: SizedBox(
-              height: 80,
-              child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => Container(
-                  margin: EdgeInsets.only(
-                    left: index == 0 ? 15 : 8,
-                    right: 8,
-                    top: 8,
-                    bottom: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color:
-                        const Color(0xff36CDC6).withOpacity((index + 1) / 10),
-                  ),
-                  height: 80,
-                  width: 100,
-                  child: Center(
-                    child: Text("Shortcut ${index + 1}"),
-                  ),
-                ),
-                itemCount: 5,
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8.0),
+          //   child: Text(
+          //     "Quick Acess",
+          //     style: GoogleFonts.roboto(
+          //       color: Colors.black,
+          //       fontSize: 18,
+          //       fontWeight: FontWeight.w400,
+          //     ),
+          //   ),
+          // ),
+          // SingleChildScrollView(
+          //   child: SizedBox(
+          //     height: 80,
+          //     child: ListView.builder(
+          //       shrinkWrap: true,
+          //       scrollDirection: Axis.horizontal,
+          //       itemBuilder: (context, index) => Container(
+          //         margin: EdgeInsets.only(
+          //           left: index == 0 ? 15 : 8,
+          //           right: 8,
+          //           top: 8,
+          //           bottom: 8,
+          //         ),
+          //         decoration: BoxDecoration(
+          //           borderRadius: BorderRadius.circular(18),
+          //           color:
+          //               const Color(0xff36CDC6).withOpacity((index + 1) / 10),
+          //         ),
+          //         height: 80,
+          //         width: 100,
+          //         child: Center(
+          //           child: Text("Shortcut ${index + 1}"),
+          //         ),
+          //       ),
+          //       itemCount: 5,
+          //     ),
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "FEEDS",
               style: GoogleFonts.roboto(
                 color: Colors.black,
-                fontSize: 18,
+                fontSize: 30,
                 fontWeight: FontWeight.w400,
               ),
             ),
           ),
           SizedBox(
-            height: 765,
+            height: 890,
             child: Material(
               child: ListView.builder(
                 shrinkWrap: true,
@@ -156,20 +156,20 @@ class _UserHomeState extends State<UserHome> {
                     ),
                   ),
                   child: SizedBox(
-                    height: 300,
+                    height: 400,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         ImageSlideshow(
                           width: double.infinity,
-                          height: 300,
+                          height: 400,
                           initialPage: 0,
                           indicatorColor: Colors.blue,
                           indicatorBackgroundColor: Colors.grey,
                           children: feeds[index]
                               .imageUrl
                               .map((e) => Container(
-                                    height: 300,
+                                    height: 400,
                                     width: double.infinity,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(

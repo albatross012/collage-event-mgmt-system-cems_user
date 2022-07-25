@@ -28,10 +28,6 @@ class _UserNavigationState extends State<UserNavigation> {
       RegisterEvent(email: widget.email),
       const UserProfile(),
       Registered(email: widget.email),
-      const Text(
-        'Results',
-        style: optionStyle,
-      ),
     ];
   }
 
@@ -106,21 +102,21 @@ class _UserNavigationState extends State<UserNavigation> {
                   ),
                 ),
               ),
-              ListTile(
-                title: const Text('Events'),
-                onTap: () {
-                  // Update the state of the app.
-                  // ...
-                },
-              ),
-              ListTile(
-                title: const Text('About'),
-                onTap: () {
-                  // Update the state of the app.
-                  // ...
-                },
-              ),
-              ListTile(title: const Text('mbits'))
+              // ListTile(
+              //   title: const Text('Events'),
+              //   onTap: () {
+              //     // Update the state of the app.
+              //     // ...
+              //   },
+              // ),
+              // ListTile(
+              //   title: const Text('About'),
+              //   onTap: () {
+              //     // Update the state of the app.
+              //     // ...
+              //   },
+              // ),
+              // ListTile(title: const Text('mbits'))
             ],
           ),
         ),
@@ -175,7 +171,6 @@ class _UserNavigationState extends State<UserNavigation> {
               icon: Icon(Icons.local_activity),
               label: 'Activities',
             ),
-            BottomNavigationBarItem(icon: Icon(Icons.badge), label: 'Results')
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: const Color(0xff36CDC6),
