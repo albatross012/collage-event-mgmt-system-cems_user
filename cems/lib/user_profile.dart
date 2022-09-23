@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cems/main.dart';
 import 'package:cems/new_user.dart';
@@ -44,8 +45,23 @@ class _UserProfileState extends State<UserProfile> {
         future: getUserData(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Center(
+              child: SpinKitCircle(
+                size: 80,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(0.9),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: index.isEven
+                            ? const Color(0xff36CDC6)
+                            : const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  );
+                },
+              ),
             );
           }
           return Container(

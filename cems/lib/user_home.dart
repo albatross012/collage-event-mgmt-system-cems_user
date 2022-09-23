@@ -7,6 +7,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -59,159 +60,179 @@ class _UserHomeState extends State<UserHome> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(
-          //     horizontal: 15,
-          //     vertical: 5,
-          //   ),
-          //   // child: TextField(
-          //   //   decoration: InputDecoration(
-          //   //     hintText: "CEMS",
-          //   //     hintStyle: GoogleFonts.roboto(
-          //   //       color: Colors.grey,
-          //   //       fontSize: 13,
-          //   //       fontWeight: FontWeight.w400,
-          //   //     ),
-          //   //     enabledBorder: OutlineInputBorder(
-          //   //       borderRadius: BorderRadius.circular(18),
-          //   //       borderSide: BorderSide(
-          //   //         color: Colors.grey.withOpacity(0.5),
-          //   //       ),
-          //   //     ),
-          //   //   ),
-          //   // ),
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Text(
-          //     "Quick Acess",
-          //     style: GoogleFonts.roboto(
-          //       color: Colors.black,
-          //       fontSize: 18,
-          //       fontWeight: FontWeight.w400,
-          //     ),
-          //   ),
-          // ),
-          // SingleChildScrollView(
-          //   child: SizedBox(
-          //     height: 80,
-          //     child: ListView.builder(
-          //       shrinkWrap: true,
-          //       scrollDirection: Axis.horizontal,
-          //       itemBuilder: (context, index) => Container(
-          //         margin: EdgeInsets.only(
-          //           left: index == 0 ? 15 : 8,
-          //           right: 8,
-          //           top: 8,
-          //           bottom: 8,
-          //         ),
-          //         decoration: BoxDecoration(
-          //           borderRadius: BorderRadius.circular(18),
-          //           color:
-          //               const Color(0xff36CDC6).withOpacity((index + 1) / 10),
-          //         ),
-          //         height: 80,
-          //         width: 100,
-          //         child: Center(
-          //           child: Text("Shortcut ${index + 1}"),
-          //         ),
-          //       ),
-          //       itemCount: 5,
-          //     ),
-          //   ),
-          // ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "FEEDS",
-              style: GoogleFonts.roboto(
-                color: Colors.black,
-                fontSize: 30,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-          SizedBox(
-            height: 890,
-            child: Material(
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: const EdgeInsets.only(bottom: 200),
-                itemBuilder: (context, index) => Container(
-                  margin: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        offset: const Offset(1, -1),
-                        color: Colors.black.withAlpha(40),
-                      )
-                    ],
-                    borderRadius: BorderRadiusDirectional.circular(
-                      28,
-                    ),
-                  ),
-                  child: SizedBox(
-                    height: 400,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ImageSlideshow(
-                          width: double.infinity,
-                          height: 400,
-                          initialPage: 0,
-                          indicatorColor: Colors.blue,
-                          indicatorBackgroundColor: Colors.grey,
-                          children: feeds[index]
-                              .imageUrl
-                              .map((e) => Container(
-                                    height: 400,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: NetworkImage(e),
-                                      ),
-                                    ),
-                                  ))
-                              .toList(),
+    return Scaffold(
+        body: isLoading
+            ? Center(
+                child: SpinKitCircle(
+                  size: 80,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(0.9),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: index.isEven
+                              ? const Color(0xff36CDC6)
+                              : const Color.fromARGB(255, 255, 255, 255),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                    );
+                  },
                 ),
-                itemCount: feeds.length,
-              ),
-            ),
-            // child: ListView.builder(
-            //   physics: const NeverScrollableScrollPhysics(),
-            //   shrinkWrap: true,
-            //   scrollDirection: Axis.vertical,
-            //   itemBuilder: (context, index) => Container(
-            //     margin: EdgeInsets.only(
-            //       left: index == 0 ? 15 : 8,
-            //       right: 8,
-            //       top: 8,
-            //       bottom: 8,
-            //     ),
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(18),
-            //       color: const Color.fromARGB(255, 90, 68, 188)
-            //           .withOpacity((index + 1) / 10),
-            //     ),
-            //     height: 100,
-            //     child: Row(),
-            //   ),
-            //   itemCount: 3,
-            // ),
-          )
-        ],
-      ),
-    );
+              )
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     horizontal: 15,
+                    //     vertical: 5,
+                    //   ),
+                    //   // child: TextField(
+                    //   //   decoration: InputDecoration(
+                    //   //     hintText: "CEMS",
+                    //   //     hintStyle: GoogleFonts.roboto(
+                    //   //       color: Colors.grey,
+                    //   //       fontSize: 13,
+                    //   //       fontWeight: FontWeight.w400,
+                    //   //     ),
+                    //   //     enabledBorder: OutlineInputBorder(
+                    //   //       borderRadius: BorderRadius.circular(18),
+                    //   //       borderSide: BorderSide(
+                    //   //         color: Colors.grey.withOpacity(0.5),
+                    //   //       ),
+                    //   //     ),
+                    //   //   ),
+                    //   // ),
+                    // ),
+                    // Padding(
+                    //   padding: const EdgeInsets.all(8.0),
+                    //   child: Text(
+                    //     "Quick Acess",
+                    //     style: GoogleFonts.roboto(
+                    //       color: Colors.black,
+                    //       fontSize: 18,
+                    //       fontWeight: FontWeight.w400,
+                    //     ),
+                    //   ),
+                    // ),
+                    // SingleChildScrollView(
+                    //   child: SizedBox(
+                    //     height: 80,
+                    //     child: ListView.builder(
+                    //       shrinkWrap: true,
+                    //       scrollDirection: Axis.horizontal,
+                    //       itemBuilder: (context, index) => Container(
+                    //         margin: EdgeInsets.only(
+                    //           left: index == 0 ? 15 : 8,
+                    //           right: 8,
+                    //           top: 8,
+                    //           bottom: 8,
+                    //         ),
+                    //         decoration: BoxDecoration(
+                    //           borderRadius: BorderRadius.circular(18),
+                    //           color:
+                    //               const Color(0xff36CDC6).withOpacity((index + 1) / 10),
+                    //         ),
+                    //         height: 80,
+                    //         width: 100,
+                    //         child: Center(
+                    //           child: Text("Shortcut ${index + 1}"),
+                    //         ),
+                    //       ),
+                    //       itemCount: 5,
+                    //     ),
+                    //   ),
+                    // ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "FEEDS",
+                        style: GoogleFonts.roboto(
+                          color: Colors.black,
+                          fontSize: 30,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 890,
+                      child: Material(
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(bottom: 200),
+                          itemBuilder: (context, index) => Container(
+                            margin: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: const Offset(1, -1),
+                                  color: Colors.black.withAlpha(40),
+                                )
+                              ],
+                              borderRadius: BorderRadiusDirectional.circular(
+                                28,
+                              ),
+                            ),
+                            child: SizedBox(
+                              height: 400,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ImageSlideshow(
+                                    width: double.infinity,
+                                    height: 400,
+                                    initialPage: 0,
+                                    indicatorColor: Colors.blue,
+                                    indicatorBackgroundColor: Colors.grey,
+                                    children: feeds[index]
+                                        .imageUrl
+                                        .map((e) => Container(
+                                              height: 400,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: NetworkImage(e),
+                                                ),
+                                              ),
+                                            ))
+                                        .toList(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          itemCount: feeds.length,
+                        ),
+                      ),
+                      // child: ListView.builder(
+                      //   physics: const NeverScrollableScrollPhysics(),
+                      //   shrinkWrap: true,
+                      //   scrollDirection: Axis.vertical,
+                      //   itemBuilder: (context, index) => Container(
+                      //     margin: EdgeInsets.only(
+                      //       left: index == 0 ? 15 : 8,
+                      //       right: 8,
+                      //       top: 8,
+                      //       bottom: 8,
+                      //     ),
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(18),
+                      //       color: const Color.fromARGB(255, 90, 68, 188)
+                      //           .withOpacity((index + 1) / 10),
+                      //     ),
+                      //     height: 100,
+                      //     child: Row(),
+                      //   ),
+                      //   itemCount: 3,
+                      // ),
+                    )
+                  ],
+                ),
+              ));
   }
 }
 

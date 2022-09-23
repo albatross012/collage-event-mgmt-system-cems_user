@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
@@ -126,10 +127,22 @@ class _RegisterEventState extends State<RegisterEvent> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading || isBusy
-          ? const Center(
-              child: CupertinoActivityIndicator(
-                color: Color(0xff36CDC6),
-                radius: 40,
+          ? Center(
+              child: SpinKitCircle(
+                size: 80,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(0.9),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: index.isEven
+                            ? const Color(0xff36CDC6)
+                            : const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  );
+                },
               ),
             )
           : SingleChildScrollView(

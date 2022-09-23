@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:cems/main.dart';
 import 'package:flutter/cupertino.dart';
@@ -77,10 +78,22 @@ class _RegisteredState extends State<Registered> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: isLoading
-          ? const Center(
-              child: CupertinoActivityIndicator(
-                color: Color(0xff36CDC6),
-                radius: 40,
+          ? Center(
+              child: SpinKitCircle(
+                size: 80,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(0.9),
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: index.isEven
+                            ? const Color(0xff36CDC6)
+                            : const Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
+                  );
+                },
               ),
             )
           : SingleChildScrollView(
@@ -138,10 +151,11 @@ class _RegisteredState extends State<Registered> {
                                   child: Center(
                                     child: Text(
                                       registered[index]["eventName"].toString(),
+                                      // "hello",
                                       style: GoogleFonts.roboto(
                                           fontSize: 30,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xff36CDC6)),
+                                          color: const Color(0xff36CDC6)),
                                     ),
                                   ),
                                 ),
